@@ -1,38 +1,211 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+:root {
+  color-scheme: light dark;
+  --light : #f2f0f5;
+  --dark : #0a0a20;
+  --theme: light-dark(var(--light), var(--dark));
+  --gray: #8f8f8f36;
+  --darkgray: #8f8f8fba;
+  --primary: #007bde;
+  
+  &:has(input[name="color-scheme"][value="light"]) {
+    color-scheme: dark;
+  }
+  &:has(input[name="color-scheme"][value="light"]:checked) {
+    color-scheme: light;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body{
+  font-family: "Afacad", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 16px;
+  background-color: var(--theme);
+  margin: 0;
+}
+
+h1,h2,h3,h4,h5,h6{
+  color: light-dark(var(--dark), var(--light));
+  margin: 10px 0;
+}
+
+.px-3{
+  padding: 0 10px;
+}
+
+input, button{
+  font-family: "Afacad", sans-serif !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+header{
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 1rem;
+  padding: 10px;
+  border-bottom: 1px solid var(--gray);
+  /* background: light-dark(var(--light), var(--dark)); */
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
-.App-link {
-  color: #61dafb;
+.form-input{
+  height: 40px;
+  border: 0;
+  border-radius: 5px;
+  padding: 10px;
+  padding-inline-start: 40px;
+  font-size: 1.3rem;
+  background-color: var(--gray);
+  &:focus{
+    outline: none;
+  }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.search--form{
+  position: relative;
+  margin-inline-start: auto;
+  max-width: 500px;
+  width: 100%;
+
+  & .form-input{
+    width: 100%;  
+    color: light-dark(#3f3d47, #e9e7e0);
   }
-  to {
-    transform: rotate(360deg);
+
+  & .search--icon{
+    position: absolute;
+    left: 5px;
+    top: 55%;
+    transform: translateY(-50%);
+    color: var(--darkgray);
   }
 }
+
+
+.theme--switch > #theme ~ .light-theme, .theme--switch > #theme:checked ~ .dark-theme{
+  display: block;
+}
+.theme--switch > #theme:checked ~ .light-theme, .theme--switch > #theme ~ .dark-theme{
+  display: none;
+}
+
+.theme--switch .theme--icon{
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover{
+    background-color: var(--gray); 
+  }
+}
+
+.flex-section{
+  display: flex;
+  gap: 1rem;
+  & aside{
+    flex-shrink: 0;
+    width: 200px;
+    border-right: 1px solid var(--gray);
+  }
+  & main{
+    flex-grow: 1;
+    width: calc(100% - 220px);
+  }
+}
+
+
+.scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--gray);
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--darkgray); 
+}
+
+ul{
+  padding: 0;
+  list-style: none;
+}
+
+aside {
+ & ul{
+    margin: 0;
+    max-height: calc(100vh - 130px);
+    overflow: auto;
+    & li{
+      cursor: pointer;
+      padding: 8px 10px;
+      text-transform: capitalize;
+      font-size: 1.1rem;
+      transition: 0.2s linear all;
+      border-radius: 5px;
+      &:hover{
+        color: #fff;
+        background-color: var(--primary);
+      }
+    } 
+  }
+}
+
+
+.trending-section{  
+  position: relative;
+    & .flex-section{
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    margin: 0;
+    padding: 5px 0;
+
+    & li{
+      flex: 0 0 150px;
+      padding: 40px 5px 5px 5px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      border-radius: 5px;
+      white-space: nowrap;
+      scroll-snap-align: start;
+      color: #fff;
+      box-shadow: 0px 1px 3px 1px #0b29403d;
+      cursor: pointer;
+    }
+    & .slider-control{
+      position: absolute;
+      left: 0;
+      top: 50%;
+      z-index: 1;
+      padding: 0;
+      border: 0;
+      line-height: 1;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      background: #00000059;
+      color: #fff;
+      &.next-control{
+        left: auto;
+        right: 0;
+      }
+    }
+  }
+}
+
+
+
+
