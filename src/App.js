@@ -12,7 +12,7 @@ function App() {
   const [category, setCategory] = React.useState([])
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
-    limit: 5
+    limit: 30
   })
 
   React.useEffect(() => {
