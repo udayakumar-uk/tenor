@@ -40,6 +40,44 @@ input, button{
   font-size: 1rem;
   font-weight: 500;
 }
+.form-input{
+  height: 40px;
+  border: 0;
+  border-radius: 5px;
+  padding: 10px;
+  padding-inline-start: 40px;
+  font-size: 1.3rem;
+  background-color: var(--gray);
+  &:focus{
+    outline: none;
+  }
+}
+
+/*  */
+
+
+.offlineContent{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--darkgray);
+  border-radius: 25px;
+  background-color: var(--gray);
+  padding: 2rem;
+  text-align: center;
+  & p{
+    color: var(--darkgray);
+    margin: 0;
+  }
+  & span{
+    font-size: 3rem;
+  }
+}
+
+
+
+
 
 header{
   display: flex;
@@ -52,19 +90,6 @@ header{
   top: 0;
   z-index: 5;
   backdrop-filter: blur(5px) saturate(2);
-}
-
-.form-input{
-  height: 40px;
-  border: 0;
-  border-radius: 5px;
-  padding: 10px;
-  padding-inline-start: 40px;
-  font-size: 1.3rem;
-  background-color: var(--gray);
-  &:focus{
-    outline: none;
-  }
 }
 
 .search--form{
@@ -226,7 +251,7 @@ aside {
       flex: 1 0 150px;
       height: 150px;
       width: 150px;
-      padding-bottom: 1.3rem;
+      padding-bottom: 1.4rem;
       position: relative;
       &:before{
         position: absolute;
@@ -236,11 +261,21 @@ aside {
         clear: both;
         width: 100%;
         height: 100%;
-        background-color: var(--gray);
+        /* background-color: light-dark(#cbe2f7, #235847); */
+        background-color: var(--primary);
         z-index: -1;
-        border-radius: 10px;
+        border-radius: 6px;
         scale: 0.1;
         transition: all ease-in-out 0.3s;
+      }
+      & .content{
+        opacity: 0;
+        transition: all ease-in 0.5s;
+        color: #fff;
+        display: block;
+      }
+      &:hover .content{
+        opacity: 1;
       }
       
       &:hover:before{
@@ -253,8 +288,11 @@ aside {
         object-position: center;
         border-radius: 5px;
       }
-      & span{
-        display: block;
+      & .favorite{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        text-shadow: 0px 2px 2px #00000078;
       }
     }
 }

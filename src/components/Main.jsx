@@ -5,42 +5,53 @@ import Featured from "./Featured";
 
 export default function Main(props){
   
+    // const [oneTime, setOneTime] = React.useState(0);
     const [trending, setTrending] = React.useState([]);
     const [featured, setFeatured] = React.useState([]);
 
     React.useEffect(() => {
-        async function fetchTrendingData(){
-          var trendingData = await fetch('https://g.tenor.com/v1/trending?key='+props.filter.key+'&limit=16')
-          .then(res=>res.json())
-          .then(data => data.results);
-          setTrending(trendingData);
-          console.log(trendingData);
-        }
         
-        async function fetchFeaturedData(){
-          var featuredData = await fetch('https://g.tenor.com/v1/featured?key='+props.filter.key+'&limit='+props.filter.limit)
-          .then(res=>res.json())
-          .then(data => data.results);
-          setFeatured(featuredData);
-          console.log(featuredData);
-        }
-
-        
-        if(trending.length == 0){
+        // if(oneTime === 0){
           fetchTrendingData();
-        }
-
-        if(featured.length == 0){
           fetchFeaturedData();
-        }
+          AddFavoriteObj();
+          // setOneTime(1);
+        // }
 
 
-      }, [trending.length, featured.length]);
+      }, []);
+
+
+      async function fetchTrendingData(){
+        var trendingData = await fetch('https://g.tenor.com/v1/trending?&key='+props.filter.key)
+        .then(res=>res.json())
+        .then(data => data.results);
+        setTrending(trendingData);
+        console.log(trendingData);
+      }
+      
+      async function fetchFeaturedData(){
+        var featuredData = await fetch('https://g.tenor.com/v1/featured?key='+props.filter.key+'&limit='+props.filter.limit)
+        .then(res=>res.json())
+        .then(data => data.results);
+        setFeatured(featuredData);
+        console.log(featuredData);
+      }
+
 
 
       function TrendingSlideControl(button){
         var slider = document.getElementById('trendingSlider');
         slider.scrollBy((button == 'next' ? 500 : -500), 0)
+      }
+
+      function AddFavoriteObj(){
+        // console.log(oneTime);
+        // if(!oneTime){
+          setFeatured(prev => (
+            prev.map(fea => ({ ...fea, favorite: false }))
+          ));
+        // }
       }
 
 

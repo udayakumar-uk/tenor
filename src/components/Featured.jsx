@@ -11,8 +11,9 @@ export default function Trending(props){
                 { props.featured.map((feature, index) => <li onClick={() => 
                     props.FeaturedItemClick(feature.content_description)} 
                     key={index} >
+                        <span className="material-symbols-rounded favorite">favorite</span>
                         <img src={feature.media[0].tinygif.url} alt={feature.content_description} />
-                        <span className="text-truncate" title={feature.content_description}>{feature.content_description}</span>
+                        <span className="text-truncate content" title={feature.content_description}>{feature.content_description}</span>
                 </li>) }
             </ul>
         </section>
