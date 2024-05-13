@@ -1,65 +1,65 @@
 import React from "react";
-import Trending from "./Trending";
+import Sticker from "./Sticker";
 import Featured from "./Featured";
 
 
 export default function Main(props){
   
     // const [oneTime, setOneTime] = React.useState(0);
-    const [trending, setTrending] = React.useState([]);
+    const [sticker, setSticker] = React.useState([]);
     const [featured, setFeatured] = React.useState([]);
 
     React.useEffect(() => {
-        
-        // if(oneTime === 0){
-          fetchTrendingData();
-          fetchFeaturedData();
-          AddFavoriteObj();
-          // setOneTime(1);
-        // }
+        console.log(featured);
+
+    }, [featured.length]);
+
+    React.useEffect(() => {
+      fetchStickerData();
+      fetchFeaturedData();
+    }, [props.filter.search]);
 
 
-      }, []);
-
-
-      async function fetchTrendingData(){
-        var trendingData = await fetch('https://g.tenor.com/v1/trending?&key='+props.filter.key)
+      async function fetchStickerData(){
+        var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&media_filter=tinygif&q='+props.filter.search+'&key='+props.filter.key)
         .then(res=>res.json())
         .then(data => data.results);
-        setTrending(trendingData);
-        console.log(trendingData);
+        setSticker(stickerData);
+        console.log(stickerData);
       }
       
       async function fetchFeaturedData(){
-        var featuredData = await fetch('https://g.tenor.com/v1/featured?key='+props.filter.key+'&limit='+props.filter.limit)
+        var featuredData = await fetch('https://g.tenor.com/v1/search?key='+props.filter.key+'&q='+props.filter.search+'&limit='+props.filter.limit)
         .then(res=>res.json())
         .then(data => data.results);
+
+        featuredData = featuredData.map(fea => ({ ...fea, favorite: false}));
+
         setFeatured(featuredData);
+
         console.log(featuredData);
       }
 
 
-
-      function TrendingSlideControl(button){
-        var slider = document.getElementById('trendingSlider');
+      function StickerSlideControl(button){
+        var slider = document.getElementById('stickerSlider');
         slider.scrollBy((button == 'next' ? 500 : -500), 0)
       }
 
-      function AddFavoriteObj(){
-        // console.log(oneTime);
-        // if(!oneTime){
-          setFeatured(prev => (
-            prev.map(fea => ({ ...fea, favorite: false }))
-          ));
-        // }
+      function FavoriteClick(id, e){ 
+        setFeatured(prev => prev.map(fea => ( fea.id === id ? { ...fea, favorite: !fea.favorite} : fea)));
+        e.stopPropagation();
       }
 
-
+      function itemClicks(item){
+        console.log(item);
+      }
 
     return(
         <main>
-            <Trending trending={trending} TrendingSlideControl={TrendingSlideControl} TrendingItemClick={props.categoryEvent} />
-            <Featured featured={featured} FeaturedItemClick={props.categoryEvent} />
+            {featured.favorite && <p>test</p>}
+            <Sticker sticker={sticker} StickerSlideControl={StickerSlideControl} stickerItemClick={itemClicks} SearchImg={props.filter.search} />
+            <Featured featured={featured} FeaturedItemClick={itemClicks} favoriteClick={FavoriteClick} SearchImg={props.filter.search} />
             {/* FeaturedPagination={FeaturedPagination} */}
         </main>
     )

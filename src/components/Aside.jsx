@@ -8,7 +8,7 @@ export default function Aside(props){
                 <h2>Categories</h2>
                 <nav>
                     <ul className="scrollbar">
-                        {props.categories.map((tag, index) => <li key={index} onClick={() => props.categoryEvent(tag.searchterm)}>{tag.searchterm}</li>)}
+                        {props.categories.map((tag, index) => <li className={tag.searchterm === props.filter.search ? 'active' : ''} key={index} onClick={() => props.categoryClick(tag.searchterm)}>{tag.searchterm}</li>)}
                     </ul>
                 </nav>
             </section>

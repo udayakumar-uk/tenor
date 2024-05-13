@@ -3,18 +3,17 @@ import ReactDOM from 'react-dom/client';
 import $ from 'jquery'
 // import './index.css';
 import App from './App';
+import NoInternet from '../src/img/no_connection.png'
 
 // import './script'
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-if(window.navigator.onLine){console.log('online');}else{console.log('offline');}
-
 function OfflineContent(){
     return(
       <div className='offlineContent'>
-        <span className='material-symbols-rounded'>cell_tower</span>
+        <img src={NoInternet} width='100' alt='no connection' />
         <h2>No Internet Connection</h2>
         <p>Please check your internet connectivity and try again</p>
       </div>

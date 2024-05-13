@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Loading from '../img/loading.svg'
+import FavWhite from '../img/favorite-white.svg';
+import FavRed from '../img/favorite-red.svg';
 
 export default function Trending(props){
+
+    const [load, setLoad] = React.useState(false)
+
+    React.useEffect(() => {
+        setLoad(true);
+
+        setTimeout(function(){
+            setLoad(false)
+        }, 700)
+
+        console.log(props.SearchImg);
+
+    }, [props.SearchImg])
+
 
     return(
         <section className="featured-section">
@@ -11,8 +28,9 @@ export default function Trending(props){
                 { props.featured.map((feature, index) => <li onClick={() => 
                     props.FeaturedItemClick(feature.content_description)} 
                     key={index} >
-                        <span className="material-symbols-rounded favorite">favorite</span>
-                        <img src={feature.media[0].tinygif.url} alt={feature.content_description} />
+                        <button type="button" onClick={(e) => props.favoriteClick(feature.id, e)} className="favorite"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
+                        <img src={load ? Loading : feature.media[0].tinygif.url} alt={feature.content_description} loading="lazy"  />
+                        {/* {load && <p>loading</p>} */}
                         <span className="text-truncate content" title={feature.content_description}>{feature.content_description}</span>
                 </li>) }
             </ul>
