@@ -16,6 +16,8 @@ export default function Header(props){
                 <input type="search" onKeyUp={(e) => props.searchInput(e)} name="search" id="search" className="form-input" />
             </div>
 
+            <Link to="favorite">Favorite</Link>
+
             <div className="theme--switch">
                 <input type="checkbox" name="color-scheme" id="theme" value="light" hidden />
                 <label htmlFor="theme" className="material-symbols-rounded theme--icon light-theme">light_mode</label>

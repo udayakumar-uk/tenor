@@ -21,16 +21,13 @@ export default function Trending(props){
 
     return(
         <section className="featured-section">
-            <h2>Featured</h2>
+            <h2>{props.title}</h2>
             <ul className="flex-section">
-                {/* <button className="slider-control prev-control" onClick={() => props.TrendingSlideControl('prev')} id="prev"><span className="material-symbols-rounded">chevron_left</span></button>
-                <button className="slider-control next-control" onClick={() => props.TrendingSlideControl('next')} id="next"><span className="material-symbols-rounded">chevron_right</span></button> */}
                 { props.featured.map((feature, index) => <li onClick={() => 
                     props.FeaturedItemClick(feature.content_description)} 
                     key={index} >
-                        <button type="button" onClick={(e) => props.favoriteClick(feature.id, e)} className="favorite"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
+                        <button type="button" onClick={(e) => props.favTrigger(feature, e)} className="favorite"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
                         <img src={load ? Loading : feature.media[0].tinygif.url} alt={feature.content_description} loading="lazy"  />
-                        {/* {load && <p>loading</p>} */}
                         <span className="text-truncate content" title={feature.content_description}>{feature.content_description}</span>
                 </li>) }
             </ul>

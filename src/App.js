@@ -11,7 +11,11 @@ function App() {
   // "https://g.tenor.com/v1/categories?key=LIVDSRZULELA&q=wow&limit=5";
 
   // const [search, setSearch] = React.useState('')
-  const [category, setCategory] = React.useState([])
+
+  const [category, setCategory] = React.useState([]);
+  const [sticker, setSticker] = React.useState([]);
+  const [featured, setFeatured] = React.useState([]);
+  const [favorites, setFavorites] = React.useState([]);
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
     limit: 30,
@@ -19,12 +23,9 @@ function App() {
   })
 
   React.useEffect(() => {
-
       fetchCategoryData();
-
   }, []);
-
-
+  
   async function fetchCategoryData(){
     var categoryData = await fetch('https://g.tenor.com/v1/categories?key='+filter.key)
     .then(res=>res.json())
@@ -32,6 +33,54 @@ function App() {
     setCategory(categoryData);
     console.log(categoryData);
   }
+
+
+  
+  React.useEffect(() => {
+    const favorites = featured.filter(fea => fea.favorite === true);
+    updateFavorite(favorites)
+  }, [featured]);
+
+  React.useEffect(() => {
+    fetchStickerData();
+    fetchFeaturedData();
+  }, [filter.search]);
+
+
+    async function fetchStickerData(){
+      var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&media_filter=tinygif&q='+filter.search+'&key='+filter.key)
+      .then(res=>res.json())
+      .then(data => data.results);
+      setSticker(stickerData);
+      console.log(stickerData);
+    }
+    
+    async function fetchFeaturedData(){
+      var featuredData = await fetch('https://g.tenor.com/v1/search?key='+filter.key+'&q='+filter.search+'&limit='+filter.limit)
+      .then(res=>res.json())
+      .then(data => data.results);
+      featuredData = featuredData.map(fea => ({ ...fea, favorite: false}));
+      setFeatured(featuredData);
+      console.log(featuredData);
+    }
+
+    function FavoriteClick(feature, e){ 
+      setFeatured(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
+      e.stopPropagation();
+    }
+    
+    function updateFavorite(fav){
+      setFavorites(fav)
+    }
+
+
+    function itemClicks(item){
+      console.log(item);
+    }
+
+
+
+
 
   function searchValue(event){
     var searchValues = event.target.value;
@@ -43,10 +92,7 @@ function App() {
 
   function categoryClick(item){
     setFilter(prev => ({...prev, search: item}))
-    // var search = document.getElementById('search');
-    // search.value = item
   }
-
 
   return (
     <div className="App">
@@ -55,10 +101,12 @@ function App() {
         <section className='flex-section px-3'>
 
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
-          <Routes>
-            <Route path='/' element={<Main filter={filter} />}/>
-            <Route path='favorite' element={<Favorite />}/>
-          </Routes>
+          <main>
+            <Routes>
+              <Route path='/' element={<Main filter={filter} sticker={sticker} featured={featured} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
+              <Route path='favorite' element={<Favorite favorites={favorites} />}/>
+            </Routes>
+          </main>
           
           
         </section>
