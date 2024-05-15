@@ -26,7 +26,7 @@ export default function Trending(props){
                 { props.featured.map((feature, index) => <li onClick={() => 
                     props.FeaturedItemClick(feature.content_description)} 
                     key={index} >
-                        <button type="button" onClick={(e) => props.favTrigger(feature, e)} className="favorite"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
+                        <button type="button" onClick={(e) => props.favTrigger(feature, e)} className="favorite btn"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
                         <img src={load ? Loading : feature.media[0].tinygif.url} alt={feature.content_description} loading="lazy"  />
                         <span className="text-truncate content" title={feature.content_description}>{feature.content_description}</span>
                 </li>) }

@@ -35,11 +35,23 @@ function App() {
     console.log(categoryData);
   }
   
+  // React.useEffect(() => {
+
+  //   let setFavGif = featured.map(fea => ({...fea, favorite: favorites.find(fav => fea.id === fav.id)?.favorite ?? fea.favorite}))
+  //   console.log(setFavGif);
+  //   setFeatured(setFavGif)
+    
+  // }, [featured]);
+
+  
   React.useEffect(() => {
     const fav = featured.filter(fea => fea.favorite === true);
-    setFavorites(fav)
-    setInc(false)
+    const getAllFav = favorites.filter(fea => fea.favorite === true)
+    const setFavItems = getAllFav.concat(fav)
+    setFavorites(setFavItems)
+    console.log(setFavItems);
   }, [inc]);
+
 
   React.useEffect(() => {
     fetchStickerData();
@@ -62,16 +74,20 @@ function App() {
       featuredData = featuredData.map(fea => ({ ...fea, favorite: false}));
       
 
-      setFeatured(featuredData);
+      // setFeatured(featuredData);
+      // console.log(featuredData);
+
+      let setFavGif = featuredData.map(fea => ({...fea, favorite: favorites.find(fav => fea.id === fav.id)?.favorite ?? fea.favorite}))
+      console.log(setFavGif);
+      setFeatured(setFavGif)
 
       
-
-      console.log(featuredData);
     }
 
     function FavoriteClick(feature, e){ 
       setFeatured(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
-      setInc(true)
+      setInc(prev => !prev)
+      // setFavorites(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       e.stopPropagation();
     }
 
