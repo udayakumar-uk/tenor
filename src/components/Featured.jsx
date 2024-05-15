@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Loading from '../img/loading.svg'
 import FavWhite from '../img/favorite-white.svg';
 import FavRed from '../img/favorite-red.svg';
@@ -12,7 +12,7 @@ export default function Trending(props){
 
         setTimeout(function(){
             setLoad(false)
-        }, 700)
+        }, 500)
 
         console.log(props.SearchImg);
 

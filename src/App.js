@@ -10,12 +10,13 @@ function App() {
   // featured, categories, trending, autocomplete, search, search_suggestions, searchfilter=sticker,static, media_filter=gif,tinygif
   // "https://g.tenor.com/v1/categories?key=LIVDSRZULELA&q=wow&limit=5";
 
-  // const [search, setSearch] = React.useState('')
+  const [inc, setInc] = React.useState(false)
 
   const [category, setCategory] = React.useState([]);
   const [sticker, setSticker] = React.useState([]);
   const [featured, setFeatured] = React.useState([]);
   const [favorites, setFavorites] = React.useState([]);
+
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
     limit: 30,
@@ -33,13 +34,12 @@ function App() {
     setCategory(categoryData);
     console.log(categoryData);
   }
-
-
   
   React.useEffect(() => {
-    const favorites = featured.filter(fea => fea.favorite === true);
-    updateFavorite(favorites)
-  }, [featured]);
+    const fav = featured.filter(fea => fea.favorite === true);
+    setFavorites(fav)
+    setInc(false)
+  }, [inc]);
 
   React.useEffect(() => {
     fetchStickerData();
@@ -60,25 +60,25 @@ function App() {
       .then(res=>res.json())
       .then(data => data.results);
       featuredData = featuredData.map(fea => ({ ...fea, favorite: false}));
+      
+
       setFeatured(featuredData);
+
+      
+
       console.log(featuredData);
     }
 
     function FavoriteClick(feature, e){ 
       setFeatured(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
+      setInc(true)
       e.stopPropagation();
-    }
-    
-    function updateFavorite(fav){
-      setFavorites(fav)
     }
 
 
     function itemClicks(item){
       console.log(item);
     }
-
-
 
 
 
@@ -97,14 +97,14 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header searchInput={searchValue} filter={filter} />
+        <Header searchInput={searchValue} filter={filter} favorites={favorites} />
         <section className='flex-section px-3'>
 
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
             <Routes>
               <Route path='/' element={<Main filter={filter} sticker={sticker} featured={featured} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
-              <Route path='favorite' element={<Favorite favorites={favorites} />}/>
+              <Route path='favorite' element={<Favorite filter={filter} favorites={favorites} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
             </Routes>
           </main>
           
