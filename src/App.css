@@ -279,13 +279,11 @@ aside {
       /* flex-wrap: wrap;
       gap: 2rem; */
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 2rem;
     }
     & li{
-      /* flex: 1 0 150px; */
-      height: 150px;
-      /* width: 150px; */
+      height: 160px;
       padding-bottom: 1.4rem;
       position: relative;
       &:before{
@@ -350,5 +348,14 @@ aside {
     }
 }
 
-
+.titleNav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & a{
+    display: inline-block;
+    color: unset;
+    text-decoration: none;
+  }
+}
 

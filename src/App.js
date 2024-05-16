@@ -1,10 +1,10 @@
 import React from 'react';
-import {BrowserRouter, Link, Routes, Router, Route} from 'react-router-dom';
+import {BrowserRouter, Link, Routes, useNavigate, Route} from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Aside from './components/Aside';
 import Main from './components/Main';
-import Favorite from './components/Favorite';
+import Featured from './components/Featured';
 
 function App() {
   // featured, categories, trending, autocomplete, search, search_suggestions, searchfilter=sticker,static, media_filter=gif,tinygif
@@ -13,9 +13,10 @@ function App() {
   const [inc, setInc] = React.useState(false)
 
   const [category, setCategory] = React.useState([]);
-  const [sticker, setSticker] = React.useState([]);
+  const [stickers, setSticker] = React.useState([]);
   const [featured, setFeatured] = React.useState([]);
   const [favorites, setFavorites] = React.useState([]);
+  
 
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
@@ -48,8 +49,9 @@ function App() {
     const fav = featured.filter(fea => fea.favorite === true);
     const getAllFav = favorites.filter(fea => fea.favorite === true)
     const setFavItems = getAllFav.concat(fav)
-    setFavorites(setFavItems)
-    console.log(setFavItems);
+    const removeDupItem = [...new Set(setFavItems)]
+    setFavorites(removeDupItem)
+    console.log(removeDupItem);
   }, [inc]);
 
 
@@ -86,8 +88,8 @@ function App() {
 
     function FavoriteClick(feature, e){ 
       setFeatured(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
+      setFavorites(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       setInc(prev => !prev)
-      // setFavorites(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       e.stopPropagation();
     }
 
@@ -97,30 +99,27 @@ function App() {
     }
 
 
-
-  function searchValue(event){
-    var searchValues = event.target.value;
-    if(event.keyCode == 13){
-      setFilter(prev => ({...prev, search: searchValues}))
-      console.log('search', filter);
-    }
+  function searchValue(searchTerm){
+    setFilter(prev => ({...prev, search: searchTerm}))
+    console.log('search', filter);
   }
 
-  function categoryClick(item){
-    setFilter(prev => ({...prev, search: item}))
+  function categoryClick(categoryTerm){
+    setFilter(prev => ({...prev, search: categoryTerm}))
   }
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Header searchInput={searchValue} filter={filter} favorites={favorites} />
+        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} />
         <section className='flex-section px-3'>
 
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
             <Routes>
-              <Route path='/' element={<Main filter={filter} sticker={sticker} featured={featured} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
-              <Route path='favorite' element={<Favorite filter={filter} favorites={favorites} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
+              <Route path='/' element={<Main filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
+              <Route path='favorites' element={<Featured title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} SearchImg="" />}/>
+              <Route path='stickers' element={<Featured title="Stickers" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} SearchImg="" />}/>
             </Routes>
           </main>
           

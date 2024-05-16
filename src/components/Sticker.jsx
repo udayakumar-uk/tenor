@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import Loading from '../img/loading.svg'
 
 export default function Sticker(props){
@@ -18,7 +19,10 @@ export default function Sticker(props){
     
     return(
         <section className="sticker-section">
-            <h2>Stickers</h2>
+            <div className="titleNav">
+                <h2>Stickers</h2>
+                <Link to="stickers">See All</Link>
+            </div>
             <ul className="flex-section scrollbar" id="stickerSlider">
                 <button className="slider-control prev-control" onClick={() => props.StickerSlideControl('prev')} id="prev"><span className="material-symbols-rounded">chevron_left</span></button>
                 <button className="slider-control next-control" onClick={() => props.StickerSlideControl('next')} id="next"><span className="material-symbols-rounded">chevron_right</span></button>
