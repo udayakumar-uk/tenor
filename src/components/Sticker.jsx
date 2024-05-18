@@ -13,9 +13,9 @@ export default function Sticker(props){
             setLoad(false)
         }, 700)
 
-        console.log(props.SearchImg);
+        console.log(props.filter.search);
 
-    }, [props.SearchImg])
+    }, [props.filter.search])
     
     return(
         <section className="sticker-section">

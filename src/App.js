@@ -21,7 +21,8 @@ function App() {
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
     limit: 30,
-    search: ''
+    search: '',
+    pagination: false
   })
 
   React.useEffect(() => {
@@ -36,19 +37,14 @@ function App() {
     console.log(categoryData);
   }
   
-  // React.useEffect(() => {
-
-  //   let setFavGif = featured.map(fea => ({...fea, favorite: favorites.find(fav => fea.id === fav.id)?.favorite ?? fea.favorite}))
-  //   console.log(setFavGif);
-  //   setFeatured(setFavGif)
-    
-  // }, [featured]);
 
   
   React.useEffect(() => {
-    const fav = featured.filter(fea => fea.favorite === true);
-    const getAllFav = favorites.filter(fea => fea.favorite === true)
-    const setFavItems = getAllFav.concat(fav)
+    const getAllFavFromFea = featured.filter(fea => fea.favorite === true);
+    const getAllFavFromFav = favorites.filter(fea => fea.favorite === true)
+    const getAllFavFromSticker = stickers.filter(fea => fea.favorite === true)
+    // const setFavItems = getAllFav.concat(fav)
+    const setFavItems = [...getAllFavFromFea, ...getAllFavFromFav, ...getAllFavFromSticker]
     const removeDupItem = [...new Set(setFavItems)]
     setFavorites(removeDupItem)
     console.log(removeDupItem);
@@ -58,11 +54,11 @@ function App() {
   React.useEffect(() => {
     fetchStickerData();
     fetchFeaturedData();
-  }, [filter.search]);
+  }, [filter.limit]);
 
 
     async function fetchStickerData(){
-      var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&media_filter=tinygif&q='+filter.search+'&key='+filter.key)
+      var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&media_filter=tinygif&q='+filter.search+'&limit='+filter.limit+'&key='+filter.key)
       .then(res=>res.json())
       .then(data => data.results);
       setSticker(stickerData);
@@ -74,21 +70,18 @@ function App() {
       .then(res=>res.json())
       .then(data => data.results);
       featuredData = featuredData.map(fea => ({ ...fea, favorite: false}));
-      
-
-      // setFeatured(featuredData);
-      // console.log(featuredData);
-
       let setFavGif = featuredData.map(fea => ({...fea, favorite: favorites.find(fav => fea.id === fav.id)?.favorite ?? fea.favorite}))
       console.log(setFavGif);
-      setFeatured(setFavGif)
+      setFeatured(setFavGif);
 
+      setFilter(prev => ({ ...prev, pagination: setFavGif.length > 29 ? true: false }));
       
     }
 
     function FavoriteClick(feature, e){ 
       setFeatured(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       setFavorites(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
+      setSticker(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       setInc(prev => !prev)
       e.stopPropagation();
     }
@@ -108,6 +101,12 @@ function App() {
     setFilter(prev => ({...prev, search: categoryTerm}))
   }
 
+  function loadMore(count){
+    if(filter.limit !== 50){
+      setFilter(prev => ({ ...prev, limit: prev.limit + count }));
+    }
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -117,9 +116,9 @@ function App() {
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
             <Routes>
-              <Route path='/' element={<Main filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} FavoriteClick={FavoriteClick} />}/>
-              <Route path='favorites' element={<Featured title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} SearchImg="" />}/>
-              <Route path='stickers' element={<Featured title="Stickers" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} SearchImg="" />}/>
+              <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} />}/>
+              <Route path='favorites' element={<Featured filter={filter} title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
+              <Route path='stickers' element={<Featured loadMore={loadMore} filter={filter} title="Stickers" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
             </Routes>
           </main>
           

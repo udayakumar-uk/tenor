@@ -3,7 +3,7 @@ import Loading from '../img/loading.svg'
 import FavWhite from '../img/favorite-white.svg';
 import FavRed from '../img/favorite-red.svg';
 
-export default function Trending(props){
+export default function Trending({filter, title, featured, favTrigger, FeaturedItemClick, loadMore}){
 
     const [load, setLoad] = React.useState(false)
 
@@ -14,23 +14,25 @@ export default function Trending(props){
             setLoad(false)
         }, 500)
 
-        console.log(props.SearchImg);
+        console.log(filter.search);
 
-    }, [props.SearchImg])
+    }, [filter.search])
 
 
     return(
         <section className="featured-section">
-            <h2>{props.title}</h2>
+            <h2>{title}</h2>
             <ul className="flex-section">
-                { props.featured.map((feature, index) => <li onClick={() => 
-                    props.FeaturedItemClick(feature.content_description)} 
+                { featured.map((feature, index) => <li onClick={() => 
+                    FeaturedItemClick(feature.content_description)} 
                     key={index} >
-                        <button type="button" onClick={(e) => props.favTrigger(feature, e)} className="favorite btn"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
+                        <button type="button" onClick={(e) => favTrigger(feature, e)} className="favorite btn"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
                         <img src={load ? Loading : feature.media[0].tinygif.url} alt={feature.content_description} loading="lazy"  />
                         <span className="text-truncate content" title={feature.content_description}>{feature.content_description}</span>
                 </li>) }
             </ul>
+
+            {filter.limit !== 50 && <button className="pagination" onClick={() => loadMore(10) }>Pagination</button>}
         </section>
     )
 }
