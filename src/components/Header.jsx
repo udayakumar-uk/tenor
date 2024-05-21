@@ -23,7 +23,7 @@ export default function Header(props){
                     name="search" id="search" className="form-input" />
             </div>
 
-            <Link to="favorites" title="Favorite" className="favorite"><span className="material-symbols-rounded">Favorite</span> {props.favorites.length > 0 && <span className="isFav"></span>} </Link>
+            <Link to="favorites" onClick={() => props.favClick("")} title="Favorite" className="favorite"><span className="material-symbols-rounded">Favorite</span> {props.favorites.length > 0 && <span className="isFav"></span>} </Link>
 
             <div className="theme--switch">
                 <input type="checkbox" name="color-scheme" id="theme" value="light" hidden />

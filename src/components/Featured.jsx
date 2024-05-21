@@ -32,7 +32,7 @@ export default function Trending({filter, title, featured, favTrigger, FeaturedI
                 </li>) }
             </ul>
 
-            {filter.limit !== 50 && <button className="pagination" onClick={() => loadMore(10) }>Pagination</button>}
+            {filter.limit !== 50 && filter.pagination && <button className="pagination" onClick={() => loadMore(10) }>Load More</button>}
         </section>
     )
 }

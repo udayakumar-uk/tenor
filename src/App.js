@@ -22,7 +22,7 @@ function App() {
     key: 'LIVDSRZULELA',
     limit: 30,
     search: '',
-    pagination: false
+    pagination: true
   })
 
   React.useEffect(() => {
@@ -42,11 +42,11 @@ function App() {
   React.useEffect(() => {
     const getAllFavFromFea = featured.filter(fea => fea.favorite === true);
     const getAllFavFromFav = favorites.filter(fea => fea.favorite === true)
-    const getAllFavFromSticker = stickers.filter(fea => fea.favorite === true)
+    const getAllFavFromSticker = stickers.filter(fea => fea.favorite === true);
     // const setFavItems = getAllFav.concat(fav)
     const setFavItems = [...getAllFavFromFea, ...getAllFavFromFav, ...getAllFavFromSticker]
     const removeDupItem = [...new Set(setFavItems)]
-    setFavorites(removeDupItem)
+    setFavorites(removeDupItem);
     console.log(removeDupItem);
   }, [inc]);
 
@@ -54,7 +54,7 @@ function App() {
   React.useEffect(() => {
     fetchStickerData();
     fetchFeaturedData();
-  }, [filter.limit]);
+  }, [filter.limit, filter.search]);
 
 
     async function fetchStickerData(){
@@ -73,8 +73,6 @@ function App() {
       let setFavGif = featuredData.map(fea => ({...fea, favorite: favorites.find(fav => fea.id === fav.id)?.favorite ?? fea.favorite}))
       console.log(setFavGif);
       setFeatured(setFavGif);
-
-      setFilter(prev => ({ ...prev, pagination: setFavGif.length > 29 ? true: false }));
       
     }
 
@@ -98,7 +96,8 @@ function App() {
   }
 
   function categoryClick(categoryTerm){
-    setFilter(prev => ({...prev, search: categoryTerm}))
+    setFilter(prev => ({...prev, pagination: true, search: categoryTerm, limit: 30}))
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   function loadMore(count){
@@ -107,16 +106,24 @@ function App() {
     }
   }
 
+  function seeAllClick(){
+    setFilter(prev => ({ ...prev, limit: 30}));
+  }
+
+  function favClick(){
+    setFilter(prev => ({ ...prev, pagination: false }));
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} />
+        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} favClick={favClick} />
         <section className='flex-section px-3'>
 
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
             <Routes>
-              <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} />}/>
+              <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>
               <Route path='favorites' element={<Featured filter={filter} title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
               <Route path='stickers' element={<Featured loadMore={loadMore} filter={filter} title="Stickers" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
             </Routes>

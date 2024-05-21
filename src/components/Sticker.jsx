@@ -21,7 +21,7 @@ export default function Sticker(props){
         <section className="sticker-section">
             <div className="titleNav">
                 <h2>Stickers</h2>
-                <Link to="stickers">See All</Link>
+                <Link to="stickers" onClick={() => props.seeAllClick()}>See All</Link>
             </div>
             <ul className="flex-section scrollbar" id="stickerSlider">
                 <button className="slider-control prev-control" onClick={() => props.StickerSlideControl('prev')} id="prev"><span className="material-symbols-rounded">chevron_left</span></button>

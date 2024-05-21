@@ -359,3 +359,10 @@ aside {
   }
 }
 
+.pagination{
+  margin: 2rem;
+  padding: 1rem;
+  background-color: var(--primary);
+  color: #fff;
+  border: 0;
+}
