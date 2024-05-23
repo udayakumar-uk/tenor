@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Aside from './components/Aside';
 import Main from './components/Main';
 import Featured from './components/Featured';
+import Modal from './components/Modal';
 
 function App() {
   // featured, categories, trending, autocomplete, search, search_suggestions, searchfilter=sticker,static, media_filter=gif,tinygif
@@ -16,13 +17,17 @@ function App() {
   const [stickers, setSticker] = React.useState([]);
   const [featured, setFeatured] = React.useState([]);
   const [favorites, setFavorites] = React.useState([]);
+  const [modal, setModal] = React.useState({
+    showModal: false,
+    item: null
+  });
   
 
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
     limit: 30,
     search: '',
-    pagination: true
+    pagination: false
   })
 
   React.useEffect(() => {
@@ -80,13 +85,17 @@ function App() {
       setFeatured(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       setFavorites(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
       setSticker(prev => prev.map(fea => ( fea.id === feature.id ? { ...fea, favorite: !fea.favorite} : fea)));
-      setInc(prev => !prev)
+      setInc(prev => !prev);
       e.stopPropagation();
     }
 
 
     function itemClicks(item){
-      console.log(item);
+      setModal(prev => ({...prev, showModal: true, item: item}))
+    }
+
+    function closeModal(){
+      setModal(prev => ({...prev, showModal: false}))
     }
 
 
@@ -122,6 +131,9 @@ function App() {
 
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
+
+          <Modal modalItem={modal.item} open={modal.showModal} closeModal={closeModal} />
+
             <Routes>
               <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>
               <Route path='favorites' element={<Featured filter={filter} title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
