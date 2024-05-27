@@ -63,7 +63,7 @@ function App() {
 
 
     async function fetchStickerData(){
-      var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&media_filter=tinygif&q='+filter.search+'&limit='+filter.limit+'&key='+filter.key)
+      var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&q='+filter.search+'&limit='+filter.limit+'&key='+filter.key)
       .then(res=>res.json())
       .then(data => data.results);
       setSticker(stickerData);
@@ -96,6 +96,13 @@ function App() {
 
     function closeModal(){
       setModal(prev => ({...prev, showModal: false}))
+    }
+
+    function closeBackdropModal(e){
+      if(e.target.className.includes('modal-wrapper')){
+        setModal(prev => ({...prev, showModal: false}))
+      }
+      e.stopPropagation();
     }
 
 
@@ -132,7 +139,7 @@ function App() {
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
 
-          <Modal modalItem={modal.item} open={modal.showModal} closeModal={closeModal} />
+          <Modal modalItem={modal.item} open={modal.showModal} modalTrigger={{closeModal, closeBackdropModal}} />
 
             <Routes>
               <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>

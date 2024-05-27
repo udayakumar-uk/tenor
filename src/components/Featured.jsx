@@ -34,7 +34,7 @@ export default function Trending({filter, title, featured, favTrigger, FeaturedI
             
             <div className="pagination">
                 {(filter.pagination || loadMore) && <p>Showing 1 to {filter.limit} of 50 results</p>}
-                {filter.limit !== 50 && (filter.pagination || loadMore ) && <button className="loadmore btn" onClick={() => loadMore(10) }>Load More</button>}
+                {filter.limit !== 50 && (filter.pagination || loadMore ) && <button className="loadmore btn btn-primary btn-lg" onClick={() => loadMore(10) }>Load More</button>}
             </div>
         </section>
     )
