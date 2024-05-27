@@ -12,6 +12,7 @@
   --primary: #007bde;
   --primarydark: #0066b9;
   --primarylight: #d8eafa;
+  --secondary: #9da5a8;
   
   &:has(input[name="color-scheme"][value="light"]) {
     color-scheme: dark;
@@ -52,8 +53,18 @@ button > span{
   padding: 10px 20px;
   font-size: 18px;
   transition: all linear .2s;
+  &.btn-sm{
+    padding: 5px 10px;
+  }
   &:hover{
     background-color: light-dark(var(--darkgray), var(--gray));
+  }
+  &.btn-dark{
+    background-color: var(--dark);
+    color: var(--light);
+    &:hover{
+      background-color: var(--darkalpha);
+    }
   }
   &.btn-primary{
     background-color: var(--primary);
@@ -90,6 +101,38 @@ button > span{
   
   & .col{
     flex: 1;
+  }
+}
+
+.sub-title{
+  color: var(--secondary);
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+
+.btn-group{
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  & .btn-check{
+    display: none;
+  }
+  & label{
+    flex: 1 0 60px;
+    text-align: center;
+    padding: 6px 10px;
+    border: 1px solid var(--gray);
+    background-color: var(--light);
+    color: var(--dark);
+  }
+  & >input:checked + label{
+    background-color: var(--dark);
+    color: var(--light);
   }
 }
   
@@ -142,7 +185,8 @@ input, button{
     background-color: #fff;
     border-radius: 20px;
     padding: 1.5rem;
-    max-width: 600px;
+    max-width: 750px;
+    /* min-width: 500px; */
     width: 100%;
     & .modal-close{
       position: absolute;
