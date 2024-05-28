@@ -19,7 +19,12 @@ function App() {
   const [favorites, setFavorites] = React.useState([]);
   const [modal, setModal] = React.useState({
     showModal: false,
-    item: null
+    item: null,
+    dims: null,
+    size: null,
+    type: 'gif',
+    transparent: false,
+    url: ''
   });
   
 
@@ -89,9 +94,14 @@ function App() {
       e.stopPropagation();
     }
 
+    function convertToFileSize(size) {
+      var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+      return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+    }
 
     function itemClicks(item){
-      setModal(prev => ({...prev, showModal: true, item: item}))
+      console.log(item);
+      setModal(prev => ({...prev, showModal: true, item: item, dims: item.media[0].gif.dims, size: convertToFileSize(item.media[0].gif.size)}))
     }
 
     function closeModal(){
@@ -103,6 +113,11 @@ function App() {
         setModal(prev => ({...prev, showModal: false}))
       }
       e.stopPropagation();
+    }
+
+    function gifType(type){
+      console.log(type);
+      setModal(prev => ({...prev, type: type}))
     }
 
 
@@ -139,7 +154,7 @@ function App() {
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
 
-          <Modal modalItem={modal.item} open={modal.showModal} modalTrigger={{closeModal, closeBackdropModal}} />
+          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} url={modal.url} dims={modal.dims} size={modal.size} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
 
             <Routes>
               <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>
