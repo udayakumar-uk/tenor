@@ -137,6 +137,10 @@ button > span{
     background-color: var(--dark);
     color: var(--light);
   }
+  & >input:disabled + label{
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
   
 
@@ -202,6 +206,7 @@ input, button{
       padding-block: 1rem;
       max-height: calc(100vh - 150px);
       overflow: auto;
+      align-items: center;
     }
     & .modal-footer{
       display: flex;

@@ -1,17 +1,31 @@
 import React from "react";
 
-export default function Modal({modalItem, open, modalTrigger, size, type }){
+export default function Modal({modalItem, open, modalTrigger, size, type, transparent }){
 
-    const style = {
-        color: open ? '#ff0' : '#f00',
-        transition: 'all linear 1s'
+    const [blogUrl, setBlogUrl] = React.useState(null);
+    
+    React.useEffect(function(){
+        createBlob();
+    }, [type, transparent]);
+
+    const createBlob = async function(){
+        if(modalItem){
+            const blobImgUrl = await fetch(modalItem?.media[0][type].url).then(response => response.blob()).then(blob => {
+                                const blobUrl = URL.createObjectURL(blob);
+                                console.log(blobUrl);
+                                return blobUrl;
+                            }).catch(error => console.error('Error:', error));
+            
+            setBlogUrl(blobImgUrl);
+        }
     }
 
     return(
-         <div className={`modal-wrapper modal ${open ? 'in' : ''}`} onClick={(e) => modalTrigger.closeBackdropModal(e)} >
-           <div className="modal-container">
+        
+        <div className={`modal-wrapper modal ${open ? 'in' : ''}`} onClick={(e) => modalTrigger.closeBackdropModal(e)} >
+           {open &&  <div className="modal-container">
                 <button className="modal-close btn-icon material-symbols-rounded" onClick={() => modalTrigger.closeModal()}>close</button>
-                {open &&  <div className="modal-body row scrollbar">
+                 <div className="modal-body row scrollbar">
                     <div className="col">
                         <div className="gif-img">
                             <img src={modalItem.media[0].gif.url} alt={modalItem.content_description} loading="lazy"  />
@@ -24,7 +38,7 @@ export default function Modal({modalItem, open, modalTrigger, size, type }){
                             <input type="radio" className="btn-check" name="gifType" id="medium" defaultValue="mediumgif" />
                             <label className="btn btn-sm btn-light" onClick={(e) => modalTrigger.gifType('mediumgif')} htmlFor="medium">Large</label>
                             
-                            <input type="radio" className="btn-check" name="gifType" id="gif" defaultValue="gif" />
+                            <input type="radio" className="btn-check" name="gifType" id="gif" defaultValue="gif" defaultChecked={type === 'gif'} />
                             <label className="btn btn-sm btn-light" onClick={(e) => modalTrigger.gifType('gif')} htmlFor="gif">Medium</label>
                             
                             <input type="radio" className="btn-check" name="gifType" id="tinygif" defaultValue="tinygif" />
@@ -48,10 +62,11 @@ export default function Modal({modalItem, open, modalTrigger, size, type }){
                         <br />
                         <strong className="sub-title">Transparent</strong>
                         <div className="btn-group">
-                            <input type="checkbox" className="btn-check" name="transparent" id="transparent" />
-                            <label className="btn btn-sm btn-light" defaultValue="_transparent" htmlFor="transparent">Yes</label>
+                            <input type="checkbox" disabled={!transparent} className="btn-check" onClick={(e) =>  modalTrigger.gifType('_transparent', e)}  name="transparent" id="transparent" defaultValue="_transparent"  />
+                            <label className="btn btn-sm btn-light" htmlFor="transparent">Yes</label>
                         </div>
                         <br />
+
                         <div className="modal-row row">
                             <div className="col">
                                 <strong className="sub-title">Dimensions</strong>
@@ -63,22 +78,15 @@ export default function Modal({modalItem, open, modalTrigger, size, type }){
                             </div>
                         </div>
                     </div>
-                </div> }
+                </div> 
                 <div className="modal-footer">
                     <button className="btn btn-dark btn-close" onClick={() => modalTrigger.closeModal()}>Close</button>
-                    <a href={modalItem.media[0][type].url} target="_blank" className="btn btn-download btn-primary"><span className="material-symbols-rounded">Download</span> Download</a>
+                    <a href={blogUrl} download={modalItem.content_description} className="btn btn-download btn-primary"><span className="material-symbols-rounded">Download</span> Download</a>
                 </div>
 
-            </div>
-
+            </div> }
             
-            {/* <p style={style}>Testing</p>
-
-            {open && modalItem.content_description}
-
-
-            {open && <button >Close</button> } */}
-            </div>
+        </div>
 
         
     )
