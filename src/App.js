@@ -121,7 +121,13 @@ function App() {
       if(type === '_transparent'){
         setModal(prev => ({...prev, transparentType: e.target.checked ? type : ''}))
       }else{
-        setModal(prev => ({...prev, type: type, transparent: type === 'webp' || type === 'tinygif' || type === 'nanogif'}))
+        setModal(prev => ({...prev, transparentType: '', type: type, transparent: type === 'webp' || type === 'tinygif' || type === 'nanogif'}))
+        
+        // unchecking 
+        const transCheckbox = document.getElementById('transparent');
+        if(type){
+          transCheckbox.checked = false
+        }
       }
     }
 
@@ -164,7 +170,7 @@ function App() {
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
 
-          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} url={modal.url} transparent={modal.transparent} dims={modal.dims} size={modal.size} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
+          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} url={modal.url} transparent={modal.transparent} transparentType={modal.transparentType} dims={modal.dims} size={modal.size} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
 
             <Routes>
               <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>
