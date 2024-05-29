@@ -1,17 +1,17 @@
 import React from "react";
 import TransImg from '../img/transparent.png';
 
-export default function Modal({modalItem, open, modalTrigger, size, type, transparentType, transparent }){
+export default function Modal({modalItem, open, modalTrigger, type, modal }){
 
     const [blogUrl, setBlogUrl] = React.useState(null);
     
     React.useEffect(function(){
         createBlob();
-    }, [type, transparentType]);
+    }, [type, modal.transparentType]);
 
     const createBlob = async function(){
         if(modalItem){
-            const blobImgUrl = await fetch(modalItem?.media[0][type + transparentType].url).then(response => response.blob()).then(blob => {
+            const blobImgUrl = await fetch(modalItem?.media[0][type + modal.transparentType].url).then(response => response.blob()).then(blob => {
                                 const blobUrl = URL.createObjectURL(blob);
                                 console.log(blobUrl);
                                 return blobUrl;
@@ -22,7 +22,7 @@ export default function Modal({modalItem, open, modalTrigger, size, type, transp
     }
 
     const style = {
-        background: transparentType ? 'url('+TransImg+')' : '#fff'
+        background: modal.transparentType ? 'url('+TransImg+')' : '#fff'
     }
 
     return(
@@ -38,7 +38,7 @@ export default function Modal({modalItem, open, modalTrigger, size, type, transp
                                 <source src={modalItem.media[0][type].url} type="video/mp4" />
                             </video>
                             : 
-                            <img src={modalItem.media[0][type + transparentType].url} alt={modalItem.content_description} loading="lazy"  />
+                            <img src={modalItem.media[0][type + modal.transparentType].url} alt={modalItem.content_description} loading="lazy"  />
                         }
                         </div>
                     </div>
@@ -71,11 +71,16 @@ export default function Modal({modalItem, open, modalTrigger, size, type, transp
                             <label className="btn btn-sm btn-light" onClick={(e) => modalTrigger.gifType('nanomp4')} htmlFor="nanomp4">Nanomp4</label>
                         </div>
                         <br />
-                        <strong className="sub-title">Transparent</strong>
-                        <div className="btn-group">
-                            <input type="checkbox" disabled={!transparent} className="btn-check" onClick={(e) =>  modalTrigger.gifType('_transparent', e)}  name="transparent" id="transparent" defaultValue="_transparent"  />
-                            <label className="btn btn-sm btn-light" htmlFor="transparent">{transparentType ? 'Yes': 'No'}</label>
-                        </div>
+
+                        {  modal.sticker &&  <>
+                                <strong className="sub-title">Transparent</strong>
+                                <div className="btn-group">
+                                    <input type="checkbox" disabled={!modal.transparent} className="btn-check" onClick={(e) =>  modalTrigger.gifType('_transparent', e)}  name="transparent" id="transparent" defaultValue="_transparent"  />
+                                    <label className="btn btn-sm btn-light" htmlFor="transparent">{modal.transparentType ? 'Yes': 'No'}</label>
+                                </div>
+                            </>
+                            }
+                        
                         <br />
 
                         <div className="modal-row row">

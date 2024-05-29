@@ -26,7 +26,7 @@ export default function Sticker(props){
             <ul className="flex-section scrollbar" id="stickerSlider">
                 <button className="slider-control prev-control" onClick={() => props.StickerSlideControl('prev')} id="prev"><span className="material-symbols-rounded">chevron_left</span></button>
                 <button className="slider-control next-control" onClick={() => props.StickerSlideControl('next')} id="next"><span className="material-symbols-rounded">chevron_right</span></button>
-                { props.sticker.map((stick, index) => <li onClick={() => props.stickerItemClick(stick)} id={`slider${index}`} className="drag" 
+                { props.sticker.map((stick, index) => <li onClick={() => props.stickerItemClick(stick, 'sticker')} id={`slider${index}`} className="drag" 
                     key={index} 
                     style={{
                         backgroundImage: `linear-gradient(1deg, #000000ad 20%, #0000000f 80%), url(${load ? Loading : stick.media[0].tinygif.url})`

@@ -23,6 +23,7 @@ function App() {
     dims: null,
     size: null,
     type: null,
+    sticker: false,
     transparentType: '',
     transparent: false,
     url: ''
@@ -100,18 +101,18 @@ function App() {
       return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     }
 
-    function itemClicks(item){
+    function itemClicks(item, isSticker){
       console.log(item);
-      setModal(prev => ({...prev, showModal: true, item: item, type: 'gif', dims: item.media[0].gif.dims, size: convertToFileSize(item.media[0].gif.size)}))
+      setModal(prev => ({...prev, showModal: true, sticker: isSticker === 'sticker', item: item, type: 'gif', dims: item.media[0].gif.dims, size: convertToFileSize(item.media[0].gif.size)}))
     }
 
     function closeModal(){
-      setModal(prev => ({...prev, showModal: false}))
+      setModal(prev => ({...prev, showModal: false, sticker:false, type: 'gif', transparent: false, transparentType: ''}))
     }
 
     function closeBackdropModal(e){
       if(e.target.className.includes('modal-wrapper')){
-        setModal(prev => ({...prev, showModal: false}))
+        setModal(prev => ({...prev, showModal: false, sticker:false, type: 'gif', transparent: false, transparentType: ''}))
       }
       e.stopPropagation();
     }
@@ -125,20 +126,15 @@ function App() {
         
         // unchecking 
         const transCheckbox = document.getElementById('transparent');
-        if(type){
+        if(type && transCheckbox){
           transCheckbox.checked = false
         }
       }
     }
 
-    // function gifTrans(trans, e){
-    //   console.log(e.target.value);
-    //   setModal(prev => ({...prev, type: (trans === '_transparent' ? modal.type + '_transparent' : type)}))
-    // }
-
-
   function searchValue(searchTerm){
-    setFilter(prev => ({...prev, search: searchTerm}))
+    setFilter(prev => ({...prev, search: searchTerm, limit: 30}))
+    window.scrollTo({top: 0, behavior: 'smooth'});
     console.log('search', filter);
   }
 
@@ -170,12 +166,12 @@ function App() {
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
 
-          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} url={modal.url} transparent={modal.transparent} transparentType={modal.transparentType} dims={modal.dims} size={modal.size} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
+          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} url={modal.url} modal={{ ...modal }} size={modal.size} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
 
             <Routes>
               <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>
               <Route path='favorites' element={<Featured filter={filter} title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
-              <Route path='stickers' element={<Featured loadMore={loadMore} filter={filter} title="Stickers" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
+              <Route path='stickers' element={<Featured loadMore={loadMore} filter={filter} title="Stickers" isSticker="sticker" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
             </Routes>
           </main>
           
