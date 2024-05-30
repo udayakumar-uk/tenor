@@ -595,9 +595,9 @@ aside {
     }
   }
 
-  .flex-section{
+  .aside-wrapper{
     & aside{
-      background-color: light-dark(var(--light), var(--darkalpha));
+      background-color: var(--darkalpha);
       position: fixed;
       width: 100%;
       top: 0;
@@ -605,10 +605,36 @@ aside {
       right: 0;
       bottom: 0;
       z-index: 5;
+      scale: 0;
+
+      & .aside-section {
+        top: 0;
+        bottom: 0;
+        padding: 1rem 0 1rem 1rem;
+        background-color: light-dark(var(--light), var(--dark));
+        max-width: 200px;
+        margin-left: -220px;
+        transition: all linear 0.2s;
+        & h2{
+          margin-top: 0;
+        }
+      }
+      & ul {
+        max-height: calc(100vh - 70px);
     }
-    & .aside-section{
-      background-color: var(--dark);
-      max-width: 200px;
     }
+
+    &.open-sidebar{
+      & aside{
+        scale: 1;
+
+        & .aside-section {
+          margin-left: 0px;
+        }
+      }
+    }
+
   }
+
+
 }

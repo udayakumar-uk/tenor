@@ -11,7 +11,7 @@ export default function Header(props){
         <header>
             <Link className="header-logo" to='/' onClick={() => props.categoryClick("")}><img src={Logo} width="100" alt="logo" /></Link>
             
-            <button type="button" className="open-menu btn btn-sm"><span className="material-symbols-rounded">menu</span></button>
+            <button type="button" className="open-menu btn btn-sm" onClick={() => props.openSidebar()}><span className="material-symbols-rounded">menu</span></button>
 
             <div className="search--form">
                 <label htmlFor="search" className="material-symbols-rounded search--icon">search</label>

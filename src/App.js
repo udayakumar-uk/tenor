@@ -12,7 +12,8 @@ function App() {
   // "https://g.tenor.com/v1/categories?key=LIVDSRZULELA&q=wow&limit=5";
 
   const [inc, setInc] = React.useState(false);
-  const [localDate, SetLocalDate] = React.useState(true);
+  const [localDate, setLocalDate] = React.useState(true);
+  const [sidebar, setSidebar] = React.useState(false);
   const [category, setCategory] = React.useState([]);
   const [stickers, setSticker] = React.useState([]);
   const [featured, setFeatured] = React.useState([]);
@@ -31,8 +32,8 @@ function App() {
 
 
   if(localDate){
-    SetLocalDate(false);
-    let getLocalStr = window.localStorage.getItem('favorites');
+    setLocalDate(false);
+    let getLocalStr = window.localStorage.getItem('favorites') ?? '[]';
     let FavParse = JSON.parse(getLocalStr);
 
     setFavorites(FavParse);
@@ -170,13 +171,23 @@ function App() {
     setFilter(prev => ({ ...prev, pagination: false }));
   }
 
+  function openSidebar(e){
+    if(e && e.target.className.includes('open-sidebar')){
+      setSidebar(false);
+    }else{
+      setSidebar(true);
+    }
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} favClick={favClick} />
-        <section className='flex-section px-3'>
-
-          <Aside categories={category} categoryClick={categoryClick} filter={filter} />
+        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} favClick={favClick} openSidebar={openSidebar} />
+        <section className="flex-section px-3">
+          <div className={`aside-wrapper ${sidebar ? 'open-sidebar' : ''}`} onClick={openSidebar}>
+            <Aside categories={category} categoryClick={categoryClick} filter={filter} />
+          </div>
+          
           <main>
 
           <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} modal={{ ...modal }} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
