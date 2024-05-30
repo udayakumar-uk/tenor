@@ -13,7 +13,6 @@ export default function Modal({modalItem, open, modalTrigger, type, modal }){
         if(modalItem){
             const blobImgUrl = await fetch(modalItem?.media[0][type + modal.transparentType].url).then(response => response.blob()).then(blob => {
                                 const blobUrl = URL.createObjectURL(blob);
-                                console.log(blobUrl);
                                 return blobUrl;
                             }).catch(error => console.error('Error:', error));
             

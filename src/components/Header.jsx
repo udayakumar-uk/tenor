@@ -9,8 +9,10 @@ export default function Header(props){
 
     return(
         <header>
-            <Link to='/' onClick={() => props.categoryClick("")}><img src={Logo} width="100" alt="logo" /></Link>
+            <Link className="header-logo" to='/' onClick={() => props.categoryClick("")}><img src={Logo} width="100" alt="logo" /></Link>
             
+            <button type="button" className="open-menu btn btn-sm"><span className="material-symbols-rounded">menu</span></button>
+
             <div className="search--form">
                 <label htmlFor="search" className="material-symbols-rounded search--icon">search</label>
                 <input type="search"

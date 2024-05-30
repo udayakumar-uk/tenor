@@ -4,7 +4,7 @@ import FavWhite from '../img/favorite-white.svg';
 import FavRed from '../img/favorite-red.svg';
 import NoFav from '../img/no-favorite.png';
 
-export default function Trending({filter, title, featured, favTrigger, FeaturedItemClick, loadMore, isSticker="featured"}){
+export default function Trending({filter, title, featured, favTrigger, FeaturedItemClick, loadMore}){
 
     const [load, setLoad] = React.useState(false)
 
@@ -25,7 +25,7 @@ export default function Trending({filter, title, featured, favTrigger, FeaturedI
             <h2>{title}</h2>
             <ul className="flex-section">
                 { featured.map((feature, index) => <li onClick={() => 
-                    FeaturedItemClick(feature, isSticker ?? "featured")} 
+                    FeaturedItemClick(feature)} 
                     key={index} >
                         <button type="button" onClick={(e) => favTrigger(feature, e)} className="favorite btn"><img src={feature.favorite ? FavRed : FavWhite} alt="Favorite" /></button>
                         <img src={load ? Loading : feature.media[0].tinygif.url} alt={feature.content_description} loading="lazy"  />

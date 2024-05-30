@@ -307,6 +307,9 @@ header{
   top: 0;
   z-index: 5;
   backdrop-filter: blur(5px) saturate(2);
+  & .open-menu{
+    display: none;
+  }
 }
 
 .search--form{
@@ -576,5 +579,36 @@ aside {
   & p{
     color: #919aa2;
     font-size: 1.2rem;
+  }
+}
+
+
+@media screen and (max-width: 767px) {
+  header{
+    gap: 8px;
+
+    & .open-menu{
+      display: block;
+    }
+    & .header-logo > img{
+      width: 80px;
+    }
+  }
+
+  .flex-section{
+    & aside{
+      background-color: light-dark(var(--light), var(--darkalpha));
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 5;
+    }
+    & .aside-section{
+      background-color: var(--dark);
+      max-width: 200px;
+    }
   }
 }

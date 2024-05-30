@@ -11,8 +11,8 @@ function App() {
   // featured, categories, trending, autocomplete, search, search_suggestions, searchfilter=sticker,static, media_filter=gif,tinygif
   // "https://g.tenor.com/v1/categories?key=LIVDSRZULELA&q=wow&limit=5";
 
-  const [inc, setInc] = React.useState(false)
-
+  const [inc, setInc] = React.useState(false);
+  const [localDate, SetLocalDate] = React.useState(true);
   const [category, setCategory] = React.useState([]);
   const [stickers, setSticker] = React.useState([]);
   const [featured, setFeatured] = React.useState([]);
@@ -28,6 +28,17 @@ function App() {
     transparent: false,
     url: ''
   });
+
+
+  if(localDate){
+    SetLocalDate(false);
+    let getLocalStr = window.localStorage.getItem('favorites');
+    let FavParse = JSON.parse(getLocalStr);
+
+    setFavorites(FavParse);
+  }
+
+
   
 
   const [filter, setFilter] = React.useState({
@@ -46,7 +57,7 @@ function App() {
     .then(res=>res.json())
     .then(data => data.tags);
     setCategory(categoryData);
-    console.log(categoryData);
+    console.log('category:', categoryData);
   }
   
 
@@ -59,7 +70,10 @@ function App() {
     const setFavItems = [...getAllFavFromFea, ...getAllFavFromFav, ...getAllFavFromSticker]
     const removeDupItem = [...new Set(setFavItems)]
     setFavorites(removeDupItem);
-    console.log(removeDupItem);
+
+    window.localStorage.setItem('favorites', JSON.stringify(removeDupItem));
+
+    console.log("Fav :", removeDupItem);
   }, [inc]);
 
 
@@ -73,17 +87,18 @@ function App() {
       var stickerData = await fetch('https://g.tenor.com/v1/search?&searchfilter=sticker&q='+filter.search+'&limit='+filter.limit+'&key='+filter.key)
       .then(res=>res.json())
       .then(data => data.results);
+      stickerData = stickerData.map(fea => ({ ...fea, sticker: true}));
       setSticker(stickerData);
-      console.log(stickerData);
+      console.log("Sticker : ", stickerData);
     }
     
     async function fetchFeaturedData(){
       var featuredData = await fetch('https://g.tenor.com/v1/search?key='+filter.key+'&q='+filter.search+'&limit='+filter.limit)
       .then(res=>res.json())
       .then(data => data.results);
-      featuredData = featuredData.map(fea => ({ ...fea, favorite: false}));
+      featuredData = featuredData.map(fea => ({ ...fea, favorite: false, sticker: false}));
       let setFavGif = featuredData.map(fea => ({...fea, favorite: favorites.find(fav => fea.id === fav.id)?.favorite ?? fea.favorite}))
-      console.log(setFavGif);
+      console.log("Featured : ", setFavGif);
       setFeatured(setFavGif);
       
     }
@@ -101,9 +116,9 @@ function App() {
       return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     }
 
-    function itemClicks(item, isSticker){
+    function itemClicks(item){
       console.log(item);
-      setModal(prev => ({...prev, showModal: true, sticker: isSticker === 'sticker', item: item, type: 'gif', dims: item.media[0].gif.dims, size: convertToFileSize(item.media[0].gif.size)}))
+      setModal(prev => ({...prev, showModal: true, sticker: item.sticker, item: item, type: 'gif', dims: item.media[0].gif.dims, size: convertToFileSize(item.media[0].gif.size)}))
     }
 
     function closeModal(){
@@ -118,7 +133,6 @@ function App() {
     }
 
     function gifType(type, e){
-      console.log(type);
       if(type === '_transparent'){
         setModal(prev => ({...prev, transparentType: e.target.checked ? type : ''}))
       }else{
@@ -135,7 +149,6 @@ function App() {
   function searchValue(searchTerm){
     setFilter(prev => ({...prev, search: searchTerm, limit: 30}))
     window.scrollTo({top: 0, behavior: 'smooth'});
-    console.log('search', filter);
   }
 
   function categoryClick(categoryTerm){
@@ -166,12 +179,12 @@ function App() {
           <Aside categories={category} categoryClick={categoryClick} filter={filter} />
           <main>
 
-          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} url={modal.url} modal={{ ...modal }} size={modal.size} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
+          <Modal modalItem={modal.item} open={modal.showModal} type={modal.type} modal={{ ...modal }} modalTrigger={{closeModal, closeBackdropModal, gifType, convertToFileSize}} />
 
             <Routes>
               <Route path='/' element={<Main loadMore={loadMore} filter={filter} sticker={stickers} featured={featured} itemClicks={itemClicks} favTrigger={FavoriteClick} seeAllClick={seeAllClick} />}/>
               <Route path='favorites' element={<Featured filter={filter} title="Favorite" featured={favorites} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
-              <Route path='stickers' element={<Featured loadMore={loadMore} filter={filter} title="Stickers" isSticker="sticker" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
+              <Route path='stickers' element={<Featured loadMore={loadMore} filter={filter} title="Stickers" featured={stickers} FeaturedItemClick={itemClicks} favTrigger={FavoriteClick} />}/>
             </Routes>
           </main>
           
