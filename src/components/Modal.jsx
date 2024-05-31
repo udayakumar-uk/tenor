@@ -29,7 +29,7 @@ export default function Modal({modalItem, open, modalTrigger, type, modal }){
         <div className={`modal-wrapper modal ${open ? 'in' : ''}`} onClick={(e) => modalTrigger.closeBackdropModal(e)} >
            {open &&  <div className="modal-container">
                 <button className="modal-close btn-icon material-symbols-rounded" onClick={() => modalTrigger.closeModal()}>close</button>
-                 <div className="modal-body row scrollbar">
+                 <div className="modal-body row scrollbar res-row">
                     <div className="col">
                         <div className="gif-img" style={style}>
                         {type == 'mp4' || type == 'tinymp4' || type == 'nanomp4' ? 
@@ -69,9 +69,9 @@ export default function Modal({modalItem, open, modalTrigger, type, modal }){
                             <input type="radio" className="btn-check" name="gifType" id="nanomp4" defaultValue="nanomp4" />
                             <label className="btn btn-sm btn-light" onClick={(e) => modalTrigger.gifType('nanomp4')} htmlFor="nanomp4">Nanomp4</label>
                         </div>
-                        <br />
 
                         {  modal.sticker &&  <>
+                                <br />
                                 <strong className="sub-title">Transparent</strong>
                                 <div className="btn-group">
                                     <input type="checkbox" disabled={!modal.transparent} className="btn-check" onClick={(e) =>  modalTrigger.gifType('_transparent', e)}  name="transparent" id="transparent" defaultValue="_transparent"  />

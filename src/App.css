@@ -21,6 +21,9 @@
     color-scheme: light;
   }
 }
+*{
+  box-sizing: border-box;
+}
 .material-symbols-rounded{
   vertical-align: middle;
 }
@@ -100,10 +103,12 @@ button > span{
 
 .row{
   display: flex;
-  gap: 1rem;
+  /* gap: 1rem; */
+  flex-wrap: wrap;
   
   & .col{
-    flex: 1 0;
+    flex: 1 0 50%;
+    padding-inline: 5px;
   }
 }
 
@@ -197,6 +202,7 @@ input, button{
     border-radius: 20px;
     padding: 1.5rem;
     max-width: 700px;
+    margin-inline: 15px;
     /* min-width: 500px; */
     width: 100%;
     & .modal-close{
@@ -224,12 +230,12 @@ input, button{
     & .gif-img{
       width: 300px;
       height: 300px;
-      border: 1px solid var(--gray);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      border: 1px solid var(--gray);
       & img, video{
         max-width: 100%;
         max-height: 100%;
@@ -371,10 +377,8 @@ header{
     flex-shrink: 0;
     width: 200px;
     border-right: 1px solid var(--gray);
-    & .aside-section{
-      position: sticky;
-      top: 70px;
-    }
+    position: sticky;
+    top: 70px;
   }
   & main{
     flex-grow: 1;
@@ -584,6 +588,24 @@ aside {
 
 
 @media screen and (max-width: 767px) {
+  
+  .row.res-row{
+    & > .col{
+      flex: 1 0 100%;
+      padding-inline: 10px;
+    }
+  }
+
+  .modal-wrapper {
+    & .modal-container {
+      & .gif-img {
+        margin: auto;
+        width: 200px;
+        height: 180px;
+      }
+    }
+  }
+
   header{
     gap: 8px;
 
@@ -596,25 +618,26 @@ aside {
   }
 
   .aside-wrapper{
-    & aside{
-      background-color: var(--darkalpha);
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 5;
-      scale: 0;
+    background-color: var(--darkalpha);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    scale: 0;
 
+    & aside{
+
+      top: 0;
+      bottom: 0;
+      padding: 1rem 0 1rem 6px;
+      background-color: light-dark(var(--light), var(--dark));
+      max-width: 200px;
+      margin-left: -220px;
+      transition: all linear 0.2s;
       & .aside-section {
-        top: 0;
-        bottom: 0;
-        padding: 1rem 0 1rem 1rem;
-        background-color: light-dark(var(--light), var(--dark));
-        max-width: 200px;
-        margin-left: -220px;
-        transition: all linear 0.2s;
         & h2{
           margin-top: 0;
         }
@@ -625,11 +648,11 @@ aside {
     }
 
     &.open-sidebar{
+      scale: 1;
       & aside{
-        scale: 1;
 
+        margin-left: 0px;
         & .aside-section {
-          margin-left: 0px;
         }
       }
     }

@@ -184,8 +184,8 @@ function App() {
       <BrowserRouter>
         <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} favClick={favClick} openSidebar={openSidebar} />
         <section className="flex-section px-3">
-          <div className={`aside-wrapper ${sidebar ? 'open-sidebar' : ''}`} onClick={openSidebar}>
-            <Aside categories={category} categoryClick={categoryClick} filter={filter} />
+          <div className={`aside-wrapper ${sidebar ? 'open-sidebar' : ''}`} onClick={openSidebar} >
+            <Aside categories={category} categoryClick={categoryClick} filter={filter}  />
           </div>
           
           <main>
