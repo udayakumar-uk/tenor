@@ -72,7 +72,7 @@ export default function Modal({modalItem, open, modalTrigger, type, modal }){
 
                         {  modal.sticker &&  <>
                                 <br />
-                                <strong className="sub-title">Transparent</strong>
+                                <strong className="sub-title">Transparent (Tiny, Nano, Webp)</strong>
                                 <div className="btn-group">
                                     <input type="checkbox" disabled={!modal.transparent} className="btn-check" onClick={(e) =>  modalTrigger.gifType('_transparent', e)}  name="transparent" id="transparent" defaultValue="_transparent"  />
                                     <label className="btn btn-sm btn-light" htmlFor="transparent">{modal.transparentType ? 'Yes': 'No'}</label>

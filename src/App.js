@@ -13,6 +13,8 @@ function App() {
 
   const [inc, setInc] = React.useState(false);
   const [localDate, setLocalDate] = React.useState(true);
+  const [darkMode, setDarkMode] = React.useState(false);
+  
   const [sidebar, setSidebar] = React.useState(false);
   const [category, setCategory] = React.useState([]);
   const [stickers, setSticker] = React.useState([]);
@@ -30,24 +32,33 @@ function App() {
     url: ''
   });
 
-
-  if(localDate){
-    setLocalDate(false);
-    let getLocalStr = window.localStorage.getItem('favorites') ?? '[]';
-    let FavParse = JSON.parse(getLocalStr);
-
-    setFavorites(FavParse);
-  }
-
-
-  
-
   const [filter, setFilter] = React.useState({
     key: 'LIVDSRZULELA',
     limit: 30,
     search: '',
     pagination: false
   })
+
+
+  if(localDate){
+    setLocalDate(false);
+    let getLocalStr = window.localStorage.getItem('favorites') ?? '[]';
+    let FavParse = JSON.parse(getLocalStr);
+
+
+    let getDarkMode = window.localStorage.getItem('darkMode') ?? 'false';
+    let darkModeParse = JSON.parse(getDarkMode);
+
+    setDarkMode(darkModeParse);
+    setFavorites(FavParse);
+  }
+
+
+
+  React.useEffect(() => {
+    window.localStorage.setItem('darkMode', darkMode);
+  }, [darkMode]);
+
 
   React.useEffect(() => {
       fetchCategoryData();
@@ -179,10 +190,15 @@ function App() {
     }
   }
 
+
+  function setDarkModeEvent(){
+    setDarkMode(prev => !prev);
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
-        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} favClick={favClick} openSidebar={openSidebar} />
+        <Header searchInput={searchValue} filter={filter} favorites={favorites} categoryClick={categoryClick} favClick={favClick} openSidebar={openSidebar} setDarkModeEvent={setDarkModeEvent} darkMode={darkMode} />
         <section className="flex-section px-3">
           <div className={`aside-wrapper ${sidebar ? 'open-sidebar' : ''}`} onClick={openSidebar} >
             <Aside categories={category} categoryClick={categoryClick} filter={filter}  />

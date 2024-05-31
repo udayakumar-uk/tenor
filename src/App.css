@@ -14,16 +14,18 @@
   --primarylight: #d8eafa;
   --secondary: #9da5a8;
   
-  &:has(input[name="color-scheme"][value="light"]) {
+  &:has(#theme) {
     color-scheme: dark;
   }
-  &:has(input[name="color-scheme"][value="light"]:checked) {
+  &:has(#theme:checked) {
     color-scheme: light;
   }
 }
+
 *{
   box-sizing: border-box;
 }
+
 .material-symbols-rounded{
   vertical-align: middle;
 }
@@ -339,12 +341,12 @@ header{
 }
 
 
-.theme--switch > #theme ~ .light-theme, .theme--switch > #theme:checked ~ .dark-theme{
+/* .theme--switch > #theme ~ .light-theme, .theme--switch > #theme:checked ~ .dark-theme{
   display: block;
 }
 .theme--switch > #theme:checked ~ .light-theme, .theme--switch > #theme ~ .dark-theme{
   display: none;
-}
+} */
 
 .theme--switch .theme--icon, .favorite > .material-symbols-rounded{
   padding: 6px;

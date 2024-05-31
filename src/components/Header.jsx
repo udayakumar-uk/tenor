@@ -28,9 +28,8 @@ export default function Header(props){
             <Link to="favorites" onClick={() => props.favClick("")} title="Favorite" className="favorite"><span className="material-symbols-rounded">Favorite</span> {props.favorites.length > 0 && <span className="isFav"></span>} </Link>
 
             <div className="theme--switch">
-                <input type="checkbox" name="color-scheme" id="theme" value="light" hidden />
-                <label htmlFor="theme" className="material-symbols-rounded theme--icon light-theme">light_mode</label>
-                <label htmlFor="theme" className="material-symbols-rounded theme--icon dark-theme">dark_mode</label>
+                <input type="checkbox" name="color-scheme" id="theme" value="light" defaultChecked={props.darkMode} onClick={() => props.setDarkModeEvent()} hidden />
+                <label htmlFor="theme" className="material-symbols-rounded theme--icon light-theme">{props.darkMode ? 'dark_mode' : 'light_mode'}</label>
             </div>
         </header>
     )
